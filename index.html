@@ -7,11 +7,15 @@
     
     <a-scene mindar-image="imageTargetSrc: hedef.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
 
+      <a-assets>
+        <video id="benimVideom" src="video.mp4" preload="auto" autoplay loop muted playsinline webkit-playsinline></video>
+      </a-assets>
+
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
         
-        <a-box position="0 0 0" scale="0.5 0.5 0.5" color="blue"></a-box>
+        <a-video src="#benimVideom" position="0 0 0" width="1" height="1"></a-video>
         
       </a-entity>
 
