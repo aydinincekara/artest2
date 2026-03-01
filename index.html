@@ -8,17 +8,34 @@
     <a-scene mindar-image="imageTargetSrc: hedef.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
 
       <a-assets>
-        <video id="benimVideom" src="video.mp4" preload="auto" autoplay loop muted playsinline webkit-playsinline></video>
+        <video id="benimVideom" src="video.mp4" preload="auto" loop muted playsinline webkit-playsinline></video>
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-      <a-entity mindar-image-target="targetIndex: 0">
+      <a-entity id="hedefResim" mindar-image-target="targetIndex: 0">
         
-        <a-video src="#benimVideom" position="0 0 0" width="1" height="1"></a-video>
+        <a-video src="#benimVideom" position="0 0 0" width="1" height="1.4"></a-video>
         
       </a-entity>
 
     </a-scene>
+
+    <script>
+      // Sahnemizdeki resmi ve videoyu koda tanıtıyoruz
+      const hedef = document.querySelector('#hedefResim');
+      const video = document.querySelector('#benimVideom');
+
+      // Kamera resmi bulduğunda (Target Found) videoyu oynat (Play)
+      hedef.addEventListener('targetFound', event => {
+        video.play();
+      });
+
+      // Kamera resimden uzaklaştığında (Target Lost) videoyu durdur (Pause)
+      hedef.addEventListener('targetLost', event => {
+        video.pause();
+      });
+    </script>
+
   </body>
 </html>
