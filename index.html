@@ -2,9 +2,44 @@
   <head>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
+    
+    <style>
+      /* Versiyon Numarası (Version Number) Tasarımı */
+      #versiyonKismi {
+        position: absolute; /* Ekranda serbest durması için */
+        top: 10px; /* Üstten boşluk */
+        right: 10px; /* Sağdan boşluk */
+        color: white; /* Yazı rengi */
+        font-family: Arial, sans-serif;
+        font-weight: bold; /* Kalın yazı */
+        font-size: 18px; /* Yazı büyüklüğü */
+        z-index: 1000; /* Kameranın ve videonun üstünde durmasını sağlar */
+        text-shadow: 2px 2px 4px black; /* Okunabilirliği artırmak için siyah gölge */
+      }
+
+      /* Ses Butonu (Audio Button) Tasarımı */
+      #sesButonu {
+        position: absolute; /* Ekranda serbest durması için */
+        bottom: 30px; /* Alttan boşluk */
+        left: 50%; /* Soldan ortaya al */
+        transform: translateX(-50%); /* Tam ortalamak için matematiksel düzeltme */
+        padding: 12px 24px; /* Butonun iç boşluğu */
+        font-size: 16px;
+        font-weight: bold;
+        background-color: white; /* Arka plan rengi */
+        color: black; /* Yazı rengi */
+        border: none; /* Çerçeveyi kaldır */
+        border-radius: 8px; /* Kenarları yuvarlat */
+        z-index: 1000; /* Kameranın üstünde tut */
+        cursor: pointer; /* Tıklanabilir ikon yap */
+      }
+    </style>
   </head>
   <body>
     
+    <div id="versiyonKismi">v1.0.0</div>
+    <button id="sesButonu">Sesi Aç (Unmute)</button>
+
     <a-scene mindar-image="imageTargetSrc: hedef.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
 
       <a-assets>
@@ -14,26 +49,37 @@
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity id="hedefResim" mindar-image-target="targetIndex: 0">
-        
         <a-video src="#benimVideom" position="0 0 0" width="1" height="1.4"></a-video>
-        
       </a-entity>
 
     </a-scene>
 
     <script>
-      // Sahnemizdeki resmi ve videoyu koda tanıtıyoruz
       const hedef = document.querySelector('#hedefResim');
       const video = document.querySelector('#benimVideom');
+      const sesButonu = document.querySelector('#sesButonu');
 
-      // Kamera resmi bulduğunda (Target Found) videoyu oynat (Play)
-      hedef.addEventListener('targetFound', event => {
-        video.play();
+      // Ses Butonuna (Audio Button) tıklandığında ne olacak?
+      sesButonu.addEventListener('click', () => {
+        if (video.muted) {
+          // Eğer sessizse sesi aç (Unmute) ve butonun yazısını değiştir
+          video.muted = false;
+          sesButonu.innerText = "Sesi Kapat (Mute)";
+        } else {
+          // Eğer sesliyse sesi kapat (Mute) ve butonun yazısını değiştir
+          video.muted = true;
+          sesButonu.innerText = "Sesi Aç (Unmute)";
+        }
       });
 
-      // Kamera resimden uzaklaştığında (Target Lost) videoyu durdur (Pause)
+      // Afiş Kamerada Bulunduğunda (Target Found)
+      hedef.addEventListener('targetFound', event => {
+        video.play(); // Videoyu Oynat (Play)
+      });
+
+      // Afiş Kameradan Çıktığında (Target Lost)
       hedef.addEventListener('targetLost', event => {
-        video.pause();
+        video.pause(); // Videoyu Duraklat (Pause)
       });
     </script>
 
